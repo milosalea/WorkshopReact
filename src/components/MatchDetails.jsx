@@ -4,7 +4,7 @@ import Table from "./Table";
 import { useSelector, useDispatch } from "react-redux";
 import { addTicketItem } from "../store/tickets/tickets-slice";
 
-const MatchDetails = ({ odds }) => {
+const MatchDetails = ({ data }) => {
   const dispatch = useDispatch();
   const tickets = useSelector((state) => state.tickets.gameData);
   const addNewTicketItem = (identifier) => {
@@ -18,11 +18,13 @@ const MatchDetails = ({ odds }) => {
             <Modal.Title>Half Time</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Table
+            {data && data.stakes && <Table
               // TODO:  potrebno proslijediti prve 3 kvote u komponentu Table kroz props list // kvote se nalaze u listi odds
+              list={[...data.stakes].splice(0, 3)}
               insertTicketData={addNewTicketItem}
               ticket={tickets}
             ></Table>
+            }
           </Modal.Body>
         </Modal.Dialog>
       </Col>
@@ -32,11 +34,13 @@ const MatchDetails = ({ odds }) => {
             <Modal.Title>Full Time</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Table
+            {data && data.stakes && <Table
               // TODO:  potrebno proslijediti zadnje 3 kvote u komponentu Table kroz props list // kvote se nalaze u listi odds
+              list={[...data.stakes].splice(-3, 3)}
               insertTicketData={addNewTicketItem}
               ticket={tickets}
             ></Table>
+            }
           </Modal.Body>
         </Modal.Dialog>
       </Col>

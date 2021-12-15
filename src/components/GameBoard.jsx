@@ -9,6 +9,7 @@ import PlayTicket from "./PlayTicket";
 import MatchDetails from "./MatchDetails";
 import { API_DATA } from "./../apiCall";
 
+import BetButton from './BetButton'
 const GameBoard = () => {
   const [showModal, setShowModal] = useState(false);
   const [messageModal, setMessageModal] = useState("");
@@ -51,15 +52,19 @@ const GameBoard = () => {
         </Col>
         <Col md={4} style={{ fontSize: 35, textAlign: "center" }}>
           {/* TODO: U komponentu GameInfo proslijediti kroz props podatke iz API responsa  data.homeTeamName i  data.awayTeamName*/}
-          <GameInfo/>
+          <GameInfo homeTeam={data.homeTeamName} awayTeam={data.awayTeamName} />
         </Col>
         <Col md={4}>
           <Balance />
         </Col>
       </Row>
-      <MatchDetails data={data.stakes} />
+      <MatchDetails data={data} />
       <Row style={{ height: 60 }}>
         <Col md={6} sm={12}>
+          {/** OVDJE */}
+          <BetButton betValue={5} />
+          <BetButton betValue={10} />
+          <BetButton betValue={15} />
           {showModal && (
             <ModalMessage message={messageModal} type={modalType} />
           )}

@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
-import { getTicket, updateCredit } from "../store/tickets/tickets-slice";
+import { getTicket, updateCredit, updateBet } from "../store/tickets/tickets-slice";
 import { store } from "../store/store";
 import { API_DATA } from "../apiCall";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const PlayTicket = ({ openModal, payInOperator }) => {
   const dispatch = useDispatch();
-  const [bet, setBet] = useState(1);
+  const bet = useSelector(state => state.tickets.bet);
 
+  const updateBetInRedux = (betValue) => {
+    dispatch(updateBet(betValue));
+  }
   const playTicket = () => {
     const ticket = getTicket(store.getState());
-
     // TODO: prilikom uplate unutar const ticket mora se nalaziti minimalno jedna opklada
-    if (true) {
+    if (ticket.gameData.length < 1) {
       openModal("Please choose bet type", "warning");
     }
     // TODO: broj tiketa mora biti <= balansu i
     // kada se oduzme balance od bet-a mora biti >= 0 i
     // bet mora biti > 0 i
     // balance mora biti > 0
-    else if (true) {
+    else if ((ticket.gameData.length <= bet) && ((ticket.balance - bet) >= 0) && (bet >= 0) && (ticket.balance > 0)) {
       payInTicket(ticket.gameData);
     } else {
       openModal("Problem with bet", "danger");
@@ -38,7 +41,7 @@ const PlayTicket = ({ openModal, payInOperator }) => {
       if (response.status === 200) {
         dispatch(updateCredit({ bet }));
         openModal("Successful insert", "primary");
-        setBet(1);
+        updateBetInRedux(1);
       } else {
         openModal("API problem", "danger");
       }
@@ -47,7 +50,6 @@ const PlayTicket = ({ openModal, payInOperator }) => {
       console.error(error.message);
     }
   };
-
   return (
     <InputGroup className="mb-3">
       <FormControl
@@ -56,10 +58,11 @@ const PlayTicket = ({ openModal, payInOperator }) => {
         aria-describedby="basic-addon2"
         type="number"
         value={bet}
-        // TODO: prilikom unosa uplate na ticket uraditi update setBet - useState hook-a // koristiti onChange
+        onChange={(event) => { updateBetInRedux(event.target.value) }}
+      // TODO: prilikom unosa uplate na ticket uraditi update setBet - useState hook-a // koristiti onChange
       />
       {/* TODO:  na click pozvati funkciju playTicket*/}
-      <Button variant="success" id="playTicket">
+      <Button variant="success" id="playTicket" onClick={playTicket}>
         Play ticket
       </Button>
     </InputGroup>

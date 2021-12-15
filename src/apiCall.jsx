@@ -11,7 +11,12 @@ export const API_DATA = {
   },
 
   // TODO: Kreirati novi API poziv ka servisima type: GET i proslijediti payInOperator value kao URL parametar // URL: `/api/Event/result`
-  async getResults() {
-    return null;
+  async getResults(payInOperator) {
+    const response = await axios.get("/api/Event/result", {
+      params: {
+        payInOperator
+      }
+    });
+    return response;
   },
 };

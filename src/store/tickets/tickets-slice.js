@@ -6,6 +6,7 @@ export const ticketsSlice = createSlice({
     gameData: [],
     balance: 10,
     payIn: 0,
+    bet: 1
   },
   reducers: {
     // add or remove ticket item to redux when clicked on panel
@@ -26,9 +27,13 @@ export const ticketsSlice = createSlice({
     addCredit: (state, { payload }) => {
       state.balance += +payload;
     },
+    updateBet: (state, { payload }) => {
+      console.log(`Apdejtujem bet state globalno...`);
+      state.bet = payload;
+    }
   },
 });
-export const { addTicketItem, removeTicketItems, updateCredit, addCredit } =
+export const { addTicketItem, removeTicketItems, updateCredit, addCredit, updateBet } =
   ticketsSlice.actions;
 
 export const getTicket = (state) => state.tickets;

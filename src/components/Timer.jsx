@@ -4,9 +4,9 @@ import { removeTicketItems, addCredit } from "../store/tickets/tickets-slice";
 import { API_DATA } from "./../apiCall";
 
 const Timer = ({ fetchData, openModal, payInOperator }) => {
+  const TIMEOUT = 20;
   const dispatch = useDispatch();
-  const [timeLeft, setTimeLeft] = useState(120);
-
+  const [timeLeft, setTimeLeft] = useState(TIMEOUT);
   const showResults = async (payInOperator) => {
     try {
       const response = await API_DATA.getResults(payInOperator);
@@ -16,14 +16,11 @@ const Timer = ({ fetchData, openModal, payInOperator }) => {
           dispatch(addCredit(response.data.winAmount));
 
         openModal(
-          `FT: ${response.data.fullTimeAwayGoals} vs ${
-            response.data.fullTimeHomeGoals
+          `FT: ${response.data.fullTimeAwayGoals} vs ${response.data.fullTimeHomeGoals
           }
-          HT: ${response.data.halfTimeAwayGoals} vs ${
-            response.data.halfTimeHomeGoals
+          HT: ${response.data.halfTimeAwayGoals} vs ${response.data.halfTimeHomeGoals
           }
-          ${
-            response.data.winAmount > 0 ? `Win: ${response.data.winAmount}` : ""
+          ${response.data.winAmount > 0 ? `Win: ${response.data.winAmount}` : ""
           }`,
           "primary"
         );
@@ -41,7 +38,7 @@ const Timer = ({ fetchData, openModal, payInOperator }) => {
       if (timeLeft > 0) {
         setTimeLeft((seconds) => seconds - 1);
       } else {
-        setTimeLeft(120);
+        setTimeLeft(TIMEOUT);
         dispatch(removeTicketItems());
         fetchData();
         showResults(payInOperator);
